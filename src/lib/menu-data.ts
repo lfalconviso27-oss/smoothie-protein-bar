@@ -279,6 +279,15 @@ export const BOOSTERS: Booster[] = [
     available: true,
     sort_order: 8,
   },
+  {
+    id: "creatine",
+    name: "Creatine",
+    slug: "creatine",
+    grams: 5,
+    price: 150,
+    available: true,
+    sort_order: 9,
+  },
 ];
 
 // ── Enhancers ────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash2, ShoppingCart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/lib/store/cart-store";
 import { formatPrice } from "@/lib/utils";
@@ -29,7 +29,9 @@ export default function CartPage() {
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center px-4 py-20 text-center">
-        <div className="text-5xl mb-4">🛒</div>
+        <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-secondary mb-4">
+          <ShoppingCart className="h-10 w-10 text-muted-foreground" />
+        </div>
         <h1 className="font-heading text-2xl font-bold">Your cart is empty</h1>
         <p className="text-muted-foreground mt-2">
           Build a smoothie or browse the menu.
@@ -77,9 +79,11 @@ export default function CartPage() {
                   {getItemSubtitle(item)} &middot;{" "}
                   {formatPrice(item.unitPrice)} each
                 </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  {item.nutrition.calories} cal &middot; {item.nutrition.protein}g protein
-                </p>
+                {item.nutrition && (
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {item.nutrition.calories} cal &middot; {item.nutrition.protein}g protein
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center gap-2">

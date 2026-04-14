@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { Droplets, Leaf, CupSoda, Sparkles } from "lucide-react";
 import { useBuilderStore } from "@/lib/store/builder-store";
 import { formatPrice } from "@/lib/utils";
 
@@ -23,7 +24,7 @@ export function NutritionSummary() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <h3 className="font-heading text-sm font-bold uppercase tracking-wider text-muted-foreground">
+      <h3 className="font-heading text-xs font-bold uppercase tracking-widest text-muted-foreground">
         Live Nutrition
       </h3>
 
@@ -33,7 +34,7 @@ export function NutritionSummary() {
             key={totalCalories}
             initial={{ scale: 1.2, color: "#7B5CF0" }}
             animate={{ scale: 1, color: "#1a1a2e" }}
-            className="text-xl font-bold"
+            className="text-xl font-bold font-heading"
           >
             {totalCalories}
           </motion.p>
@@ -44,7 +45,7 @@ export function NutritionSummary() {
             key={totalProtein}
             initial={{ scale: 1.2, color: "#7B5CF0" }}
             animate={{ scale: 1, color: "#1a1a2e" }}
-            className="text-xl font-bold"
+            className="text-xl font-bold font-heading"
           >
             {totalProtein}g
           </motion.p>
@@ -55,7 +56,7 @@ export function NutritionSummary() {
             key={totalPrice}
             initial={{ scale: 1.2 }}
             animate={{ scale: 1 }}
-            className="text-xl font-bold text-primary"
+            className="text-xl font-bold font-heading text-primary"
           >
             {hasAnything ? formatPrice(totalPrice) : "—"}
           </motion.p>
@@ -65,34 +66,49 @@ export function NutritionSummary() {
 
       {/* Build summary */}
       {hasAnything && (
-        <div className="text-xs text-muted-foreground space-y-1 pt-1 border-t border-border">
+        <div className="text-xs text-muted-foreground space-y-1.5 pt-1 border-t border-border">
           {hydrantFlavor && (
-            <div className="flex justify-between">
-              <span>💧 Hydrant {hydrantFlavor.name}</span>
-              <span className="text-green-600 font-medium">Free</span>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Droplets className="h-3 w-3 text-blue-400" />
+                Hydrant {hydrantFlavor.name}
+              </span>
+              <span className="text-green-600 font-semibold">Free</span>
             </div>
           )}
           {aloeFlavor && (
-            <div className="flex justify-between">
-              <span>🌿 Aloe {aloeFlavor.name}</span>
-              <span className="text-green-600 font-medium">Free</span>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Leaf className="h-3 w-3 text-green-500" />
+                Aloe {aloeFlavor.name}
+              </span>
+              <span className="text-green-600 font-semibold">Free</span>
             </div>
           )}
           {smoothieType && (
-            <div className="flex justify-between">
-              <span>🥤 {smoothieType.name} smoothie</span>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <CupSoda className="h-3 w-3 text-primary" />
+                {smoothieType.name} smoothie
+              </span>
               <span>{formatPrice(smoothieType.base_price)}</span>
             </div>
           )}
           {flavor && (
-            <div className="flex justify-between">
-              <span>✨ {flavor.name}</span>
+            <div className="flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="h-3 w-3 text-primary/60" />
+                {flavor.name}
+              </span>
               <span className="text-muted-foreground">included</span>
             </div>
           )}
           {selectedBoosters.map((b) => (
-            <div key={b.id} className="flex justify-between">
-              <span>+ {b.name}</span>
+            <div key={b.id} className="flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <span className="h-3 w-3 inline-flex items-center justify-center rounded-full bg-primary/20 text-[8px] font-bold text-primary">+</span>
+                {b.name}
+              </span>
               <span>{formatPrice(b.price)}</span>
             </div>
           ))}

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingCart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useCartStore } from "@/lib/store/cart-store";
@@ -20,11 +21,23 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-white/90 backdrop-blur-xl">
-      <div className="flex h-14 items-center justify-between px-4 max-w-5xl mx-auto">
-        <Link href="/" className="font-heading text-lg font-bold tracking-tight">
-          <span className="text-primary">Smoothie</span>
-          <span className="text-foreground"> Protein Bar</span>
+    <header className="sticky top-0 z-40 border-b border-border bg-white/95 backdrop-blur-xl">
+      <div className="flex h-16 items-center justify-between px-4 max-w-6xl mx-auto">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="relative h-9 w-9 overflow-hidden rounded-xl shadow-soft">
+            <Image
+              src="/spb-logo.png"
+              alt="Smoothie Protein Bar"
+              fill
+              className="object-cover"
+              sizes="36px"
+            />
+          </div>
+          <span className="font-heading text-lg font-bold tracking-tight">
+            <span className="text-primary">Smoothie</span>
+            <span className="text-foreground"> Protein Bar</span>
+          </span>
         </Link>
 
         {/* Desktop nav */}
@@ -34,9 +47,9 @@ export function Header() {
               key={link.href}
               href={link.href}
               className={cn(
-                "rounded-2xl px-4 py-2 text-sm font-medium transition-colors",
+                "rounded-xl px-4 py-2 text-sm font-semibold transition-colors",
                 pathname === link.href || pathname.startsWith(link.href + "/")
-                  ? "bg-primary/10 text-primary font-semibold"
+                  ? "bg-primary/10 text-primary"
                   : "text-muted-foreground hover:text-foreground hover:bg-secondary"
               )}
             >
@@ -46,7 +59,10 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-1">
-          <Link href="/cart" className="relative inline-flex items-center justify-center rounded-2xl h-9 w-9 hover:bg-secondary transition-colors">
+          <Link
+            href="/cart"
+            className="relative inline-flex items-center justify-center rounded-xl h-9 w-9 hover:bg-secondary transition-colors"
+          >
             <ShoppingCart className="h-5 w-5" />
             <AnimatePresence>
               {itemCount > 0 && (
@@ -73,7 +89,7 @@ export function Header() {
           ) : (
             <Link
               href="/login"
-              className="hidden md:inline-flex text-sm font-medium text-primary hover:text-primary/80 transition-colors px-3 py-2"
+              className="hidden md:inline-flex text-sm font-semibold text-primary hover:text-primary/80 transition-colors px-3 py-2 rounded-xl hover:bg-primary/5"
             >
               Sign in
             </Link>
