@@ -22,9 +22,11 @@ import {
   ChevronRight,
   Clock,
   Droplets,
+  Check,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useCartStore } from "@/lib/store/cart-store";
+import { formatPrice } from "@/lib/utils";
 import { useUser } from "@/lib/hooks/use-user";
 import { AuroraBackground } from "@/components/ui/aurora-background";
 import { AnimatedHeroWord } from "@/components/ui/animated-hero";
@@ -105,6 +107,9 @@ const TYPE_CARDS: Record<string, {
   },
 };
 
+// Price of the daily special in cents (e.g. 899 = $8.99)
+const DAILY_SPECIAL_PRICE = 899;
+
 const BOTTOM_NAV = [
   { href: "/", label: "Home", icon: Home, exact: true },
   { href: "/menu", label: "Menu", icon: UtensilsCrossed, exact: false },
@@ -168,7 +173,9 @@ export function HomeContent({
   smoothieTypes: SmoothieType[];
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [specialAdded, setSpecialAdded] = useState(false);
   const itemCount = useCartStore((s) => s.itemCount());
+  const addItem = useCartStore((s) => s.addItem);
   const { user } = useUser();
   const pathname = usePathname();
 
@@ -411,10 +418,7 @@ export function HomeContent({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-            >
-            <Link
-              href="/menu"
-              className="group flex items-center gap-5 rounded-3xl border-2 border-primary/20 bg-gradient-to-r from-primary/5 via-primary/8 to-purple-50 p-6 transition-all hover:border-primary/40 hover:shadow-soft-lg shadow-soft"
+              className="flex items-center gap-5 rounded-3xl border-2 border-primary/20 bg-gradient-to-r from-primary/5 via-primary/8 to-purple-50 p-6 shadow-soft"
             >
               <motion.div
                 className="shrink-0 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary"
@@ -423,22 +427,57 @@ export function HomeContent({
               >
                 <Star className="h-7 w-7 fill-primary/20" />
               </motion.div>
-              <div className="flex-1">
+
+              <div className="flex-1 min-w-0">
                 <p className="text-xs font-bold text-primary uppercase tracking-widest">
                   Today&apos;s Special — {todaySpecial.day_name}
                 </p>
-                <p className="font-heading text-xl font-bold mt-0.5 text-foreground">
+                <p className="font-heading text-xl font-bold mt-0.5 text-foreground truncate">
                   {todaySpecial.item_name}
                 </p>
                 {todaySpecial.description && (
-                  <p className="text-sm text-muted-foreground mt-0.5">{todaySpecial.description}</p>
+                  <p className="text-sm text-muted-foreground mt-0.5 leading-tight">
+                    {todaySpecial.description}
+                  </p>
                 )}
+                <p className="text-lg font-extrabold text-primary mt-1">
+                  {formatPrice(DAILY_SPECIAL_PRICE)}
+                </p>
               </div>
-              <div className="shrink-0 flex items-center gap-1 rounded-2xl bg-primary px-5 py-2.5 text-sm font-bold text-white group-hover:bg-primary/90 transition-colors">
-                Order now
-                <ArrowRight className="h-4 w-4" />
-              </div>
-            </Link>
+
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  addItem({
+                    productType: "special",
+                    name: todaySpecial.item_name,
+                    quantity: 1,
+                    unitPrice: DAILY_SPECIAL_PRICE,
+                    details: { itemId: todaySpecial.id },
+                    nutrition: { calories: 0, protein: 0 },
+                  });
+                  setSpecialAdded(true);
+                  setTimeout(() => setSpecialAdded(false), 2000);
+                }}
+                className={cn(
+                  "shrink-0 flex items-center gap-2 rounded-2xl px-5 py-2.5 text-sm font-bold transition-all",
+                  specialAdded
+                    ? "bg-green-500 text-white"
+                    : "bg-primary text-white hover:bg-primary/90"
+                )}
+              >
+                {specialAdded ? (
+                  <>
+                    <Check className="h-4 w-4" />
+                    Added!
+                  </>
+                ) : (
+                  <>
+                    <ShoppingCart className="h-4 w-4" />
+                    Add to Cart
+                  </>
+                )}
+              </motion.button>
             </motion.div>
           </section>
         )}

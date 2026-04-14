@@ -1,9 +1,13 @@
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
 export async function POST(request: Request) {
   try {
+    const secretKey = process.env.STRIPE_SECRET_KEY;
+    if (!secretKey) {
+      return Response.json({ error: "Stripe is not configured" }, { status: 500 });
+    }
+    const stripe = new Stripe(secretKey);
+
     const { amount, metadata } = await request.json();
 
     if (!amount || typeof amount !== "number" || amount < 50) {

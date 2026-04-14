@@ -17,6 +17,7 @@ function getItemSubtitle(item: CartItem): string {
     }
     return parts.join(" · ");
   }
+  if (item.productType === "special") return "Today's Special";
   return item.productType.charAt(0).toUpperCase() + item.productType.slice(1);
 }
 

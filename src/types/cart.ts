@@ -1,4 +1,4 @@
-export type ProductType = "smoothie" | "bowl" | "hydration" | "snack" | "enhancer";
+export type ProductType = "smoothie" | "bowl" | "hydration" | "snack" | "enhancer" | "special";
 
 export interface SmoothieBuildDetails {
   smoothieTypeId: string;
